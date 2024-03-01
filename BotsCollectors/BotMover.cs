@@ -14,8 +14,7 @@ public class BotMover : MonoBehaviour
     private bool _hasTarget;
     private Resource _resource;
     private bool _hasResource;
-     private bool _isTargetFlag = false;
-
+    private bool _isTargetFlag = false;
 
     public void Init(Transform basket, Base targetBase, Vector3 startPoint)
     {
@@ -87,7 +86,7 @@ public class BotMover : MonoBehaviour
             }
         }
 
-        if (collision.TryGetComponent(out CollectionResource collection))
+        if (collision.TryGetComponent(out ResourceCollector collection))
         {
             if (_hasResource)
             {

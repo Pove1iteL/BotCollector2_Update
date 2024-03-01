@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class FlagBase : MonoBehaviour
 {
+    private const string LayerPlaceable = "Placeable";
+
     [SerializeField] private Flag _flagPrefab;
 
-    private const string LayerPlaceable = "Placeable";
     private BaseControllerFlag _currentflagHandler;
 
     private void Update()
@@ -50,6 +51,5 @@ public class FlagBase : MonoBehaviour
     {
         Flag flag = Instantiate(_flagPrefab, hitInfo.point, Quaternion.identity);
         _currentflagHandler.SetFlag(flag);
-
     }
 }

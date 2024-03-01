@@ -3,28 +3,25 @@ using UnityEngine;
 
 public class Base : MonoBehaviour
 {
-    [SerializeField] private DetectedResource _detectedResource;
+    private const int _botForFlag = 1;
+
+    [SerializeField] private ResourceDetector _detectedResource;
     [SerializeField] private BotMover _botMoverPref;
-    [SerializeField] private CollectionResource _collectionResource;
+    [SerializeField] private ResourceCollector _collectionResource;
     [SerializeField] private Transform _spavnPoint;
     [SerializeField] private Transform _basket;
     [SerializeField] private bool _isHaveBot = false;
 
     [SerializeField] private BaseControllerFlag _controllerFlag;
-    [SerializeField] private BuildBaseSystem _buildBase;
-
-    private readonly List<BotMover> _bots = new List<BotMover>();
-    private int _maxBotsCount = 5;
-    private int _botPrice = 3;
-    private int _basePrice = 5;
+    [SerializeField] private BaseBuilerSystem _buildBase;
 
     public Transform Flag { get; private set; }
 
-
-    private void Start()
-    {
-        StartWithBot(_isHaveBot);
-    }
+    private readonly List<BotMover> _bots = new List<BotMover>();
+    private int _maxBotsCount = 5;
+    private int _BotCountForFlag = 2;
+    private int _botPrice = 3;
+    private int _basePrice = 5;
 
     public void AddBot(BotMover bot)
     {
@@ -49,16 +46,21 @@ public class Base : MonoBehaviour
         return false;
     }
 
+    private void Start()
+    {
+        StartWithBot(_isHaveBot);
+    }
+
     private void Update()
     {
-        if (_controllerFlag.IsFlagPlaced)
+        if (_controllerFlag.IsFlagPlaced && _bots.Count >= _BotCountForFlag)
         {
             if (_collectionResource.QuantityResources >= _basePrice)
             {
                 Flag = _controllerFlag.Flag.transform;
-                _bots[0].SetTargetFlag();
+                _bots[_botForFlag].SetTargetFlag();
 
-                if (_bots[0].transform.position == Flag.position)
+                if (_bots[_botForFlag].transform.position == Flag.position)
                 {
                     ChangeBase();
                 }
@@ -79,8 +81,8 @@ public class Base : MonoBehaviour
         _controllerFlag.RemoveFlag();
         _controllerFlag.Flag.gameObject.SetActive(false);
 
-        _buildBase.SetBaseChildren(_bots[0]);
-        _bots.Remove(_bots[0]);        
+        _buildBase.SetBaseChildren(_bots[_botForFlag]);
+        _bots.Remove(_bots[_botForFlag]);        
     }
 
     private void CreateBot()
@@ -99,6 +101,4 @@ public class Base : MonoBehaviour
             _collectionResource.TakeQuantityResource(_botPrice);
         }
     }
-
-
 }
